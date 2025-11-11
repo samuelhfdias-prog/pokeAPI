@@ -1,0 +1,84 @@
+<header class="pokedex-header">
+  <div class="header-content">
+    <h1>
+      <span class="logo-red">Poké</span><span class="logo-black">dex</span>
+    </h1>
+    <p class="subtitle">Descubra, Filtre e Batalhe!</p>
+  </div>
+</header>
+
+<main class="pokedex-container">
+  <aside class="sidebar">
+    <div class="control-group generation-select">
+      <h3>🌐 Geração</h3>
+      <select
+        [ngModel]="selectedGen"
+        (ngModelChange)="selectedGen = $event; onGenChange()"
+        [disabled]="isLoading"
+      >
+        <option *ngFor="let gen of generations" [ngValue]="gen">
+          {{ gen.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="control-group type-select">
+      <h3>⚡ Tipo</h3>
+      <select
+        [(ngModel)]="selectedType"
+        (change)="applyTypeFilter()"
+        [disabled]="isLoading"
+      >
+        <option *ngFor="let type of allTypes" [value]="type">
+          {{ type | titlecase }}
+        </option>
+      </select>
+    </div>
+
+    <div class="control-group trainer-list">
+      <h3>🏆 Treinadores</h3>
+      <div class="trainer-grid">
+        <div
+          *ngFor="let trainer of trainers"
+          class="trainer-avatar"
+          [class.active]="selectedTrainer === trainer"
+          (click)="loadTrainerTeam(trainer)"
+        >
+          <img [src]="trainer.imageUrl" [alt]="trainer.name" />
+          <span>{{ trainer.name }}</span>
+        </div>
+      </div>
+    </div>
+
+     <button 
+        *ngIf="selectedTrainer" 
+        class="reset-button"
+        (click)="loadGeneration(generations[0])">
+      Voltar para Pokédex
+    </button>
+  </aside>
+
+  <section class="main-content">
+    <div class="status-bar">
+      <h2 *ngIf="!selectedTrainer">Explorando: {{ selectedGen.name }}</h2>
+      <h2 *ngIf="selectedTrainer">Time de {{ selectedTrainer.name }}</h2>
+      <span class="count-badge">{{ displayedPokemons.length }} Pokémons</span>
+    </div>
+
+    <div *ngIf="isLoading" class="loading-state">
+      <div class="pokeball-spinner"></div>
+      <p>Carregando dados...</p>
+    </div>
+
+    <div *ngIf="!isLoading && displayedPokemons.length === 0" class="empty-state">
+      Nenhum Pokémon encontrado com este filtro.
+    </div>
+
+    <div *ngIf="!isLoading && displayedPokemons.length > 0" class="pokemon-grid">
+      <app-pokemon-card
+        *ngFor="let pokemon of displayedPokemons"
+        [pokemon]="pokemon"
+      ></app-pokemon-card>
+    </div>
+  </section>
+</main>
