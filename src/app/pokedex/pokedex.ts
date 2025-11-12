@@ -24,13 +24,13 @@ export class Pokedex implements OnInit {
   fullListInMemory: Pokemon[] = [];
   generations = GENERATIONS;
   selectedGen: Generation = this.generations[0];
-  allTypes = ['todos', ...Object.keys(TYPE_COLORS)];
-  selectedType: string = 'todos';
+  allTypes = ['Todos', ...Object.keys(TYPE_COLORS)];
+  selectedType: string = 'Todos';
   searchTerm: string = '';
-  allWeings=['todos','leve(<10kg)','medio(10-100kg)','pesado(>100kg)'];
-  allHeights = ['todos','baixo(<1metro)','medio(1-2 metros)','alto(>2 metros)'];
-  selectedweing: string = 'todos';
-  selectedheight: string = 'todos';
+  allWeings=['Todos','leve(<10kg)','medio(10-100kg)','pesado(>100kg)'];
+  allHeights = ['Todos','baixo(<1metro)','medio(1-2 metros)','alto(>2 metros)'];
+  selectedweing: string = 'Todos';
+  selectedheight: string = 'Todos';
   trainers: Trainer[] = [
     {
       name: 'Ash',
@@ -79,7 +79,7 @@ export class Pokedex implements OnInit {
   loadTrainerTeam(trainer: Trainer): void {
     this.isLoading = true;
     this.selectedTrainer = trainer;
-    this.selectedType = 'todos'; 
+    this.selectedType = 'Todos'; 
     this.pokemonService.getTrainersTeam(trainer.pokemons).subscribe({
       next: (pokemons) => {
         this.fullListInMemory = pokemons;
@@ -97,14 +97,14 @@ export class Pokedex implements OnInit {
   applyFilters(): void {
     let filteredList = this.fullListInMemory;
 
-    if (this.selectedType !== 'todos') {
+    if (this.selectedType !== 'Todos') {
       const type = this.selectedType.toLowerCase();
       filteredList = filteredList.filter((p) =>
         p.types.includes(type)
       );
     }
 
-    if (this.selectedheight !== 'todos') {
+    if (this.selectedheight !== 'Todos') {
       filteredList = filteredList.filter((p) => {
         const height = p.height;
         switch (this.selectedheight) {
@@ -120,7 +120,7 @@ export class Pokedex implements OnInit {
       });
     }
 
-    if (this.selectedweing !== 'todos') {
+    if (this.selectedweing !== 'Todos') {
       filteredList = filteredList.filter((p) => {
         const weight = p.weight;
         switch (this.selectedweing) {

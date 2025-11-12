@@ -29,7 +29,7 @@
         (ngModelChange)="applyFilters()"
         [disabled]="isLoading">
         <option *ngFor="let type of allTypes" [value]="type">
-        {{ type | titlecase }}
+        {{ type }}
         </option>
       </select>
     </div>
