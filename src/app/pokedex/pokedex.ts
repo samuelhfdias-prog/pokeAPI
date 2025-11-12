@@ -24,9 +24,13 @@ export class Pokedex implements OnInit {
   fullListInMemory: Pokemon[] = [];
   generations = GENERATIONS;
   selectedGen: Generation = this.generations[0];
-  allTypes = ['Todos', ...Object.keys(TYPE_COLORS)];
-  selectedType: string = 'Todos';
-
+  allTypes = ['todos', ...Object.keys(TYPE_COLORS)];
+  selectedType: string = 'todos';
+  searchTerm: string = '';
+  allWeings=['todos','leve(<10kg)','medio(10-100kg)','pesado(>100kg)'];
+  allHeights = ['todos','baixo(<1metro)','medio(1-2 metros)','alto(>2 metros)'];
+  selectedweing: string = 'todos';
+  selectedheight: string = 'todos';
   trainers: Trainer[] = [
     {
       name: 'Ash',
@@ -65,7 +69,7 @@ export class Pokedex implements OnInit {
     this.pokemonService.getPokemonList(gen.limit, gen.offset).subscribe({
       next: (pokemons) => {
         this.fullListInMemory = pokemons;
-        this.applyTypeFilter();
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (err) => { console.error(err); this.isLoading = false; },
@@ -75,11 +79,11 @@ export class Pokedex implements OnInit {
   loadTrainerTeam(trainer: Trainer): void {
     this.isLoading = true;
     this.selectedTrainer = trainer;
-    this.selectedType = 'Todos'; 
+    this.selectedType = 'todos'; 
     this.pokemonService.getTrainersTeam(trainer.pokemons).subscribe({
       next: (pokemons) => {
         this.fullListInMemory = pokemons;
-        this.applyTypeFilter();
+        this.applyFilters();
         this.isLoading = false;
       },
       error: (err) => { console.error(err); this.isLoading = false; },
@@ -90,14 +94,48 @@ export class Pokedex implements OnInit {
     this.loadGeneration(this.selectedGen);
   }
 
-  applyTypeFilter(): void {
-    if (this.selectedType === 'Todos') {
-      this.displayedPokemons = this.fullListInMemory;
-    } else {
+  applyFilters(): void {
+    let filteredList = this.fullListInMemory;
+
+    if (this.selectedType !== 'todos') {
       const type = this.selectedType.toLowerCase();
-      this.displayedPokemons = this.fullListInMemory.filter((p) =>
+      filteredList = filteredList.filter((p) =>
         p.types.includes(type)
       );
     }
+
+    if (this.selectedheight !== 'todos') {
+      filteredList = filteredList.filter((p) => {
+        const height = p.height;
+        switch (this.selectedheight) {
+          case 'baixo(<1metro)':
+            return height < 1;
+          case 'medio(1-2 metros)':
+            return height >= 1 && height <= 2;
+          case 'alto(>2 metros)':
+            return height > 2;
+          default:
+            return true;
+        }
+      });
+    }
+
+    if (this.selectedweing !== 'todos') {
+      filteredList = filteredList.filter((p) => {
+        const weight = p.weight;
+        switch (this.selectedweing) {
+          case 'leve(<10kg)':
+            return weight < 10;
+          case 'medio(10-100kg)':
+            return weight >= 10 && weight <= 100;
+          case 'pesado(>100kg)':
+            return weight > 100;
+          default:
+            return true;
+        }
+      });
+    }
+    
+    this.displayedPokemons = filteredList;
   }
 }

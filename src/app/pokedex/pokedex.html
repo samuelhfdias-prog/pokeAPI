@@ -26,12 +26,25 @@
       <h3>⚡ Tipo</h3>
       <select
         [(ngModel)]="selectedType"
-        (change)="applyTypeFilter()"
-        [disabled]="isLoading"
-      >
+        (ngModelChange)="applyFilters()"
+        [disabled]="isLoading">
         <option *ngFor="let type of allTypes" [value]="type">
-          {{ type | titlecase }}
+        {{ type | titlecase }}
         </option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <h3>📏 Altura</h3>
+      <select [(ngModel)]="selectedheight" (ngModelChange)="applyFilters()" [disabled]="isLoading">
+        <option *ngFor="let height of allHeights" [value]="height">{{ height }}</option>
+      </select>
+    </div>
+
+    <div class="control-group">
+      <h3>⚖️ Peso</h3>
+      <select [(ngModel)]="selectedweing" (ngModelChange)="applyFilters()" [disabled]="isLoading">
+        <option *ngFor="let weight of allWeings" [value]="weight">{{ weight }}</option>
       </select>
     </div>
 
@@ -50,7 +63,7 @@
       </div>
     </div>
 
-     <button 
+    <button 
         *ngIf="selectedTrainer" 
         class="reset-button"
         (click)="loadGeneration(generations[0])">
