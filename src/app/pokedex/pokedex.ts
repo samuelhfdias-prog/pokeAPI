@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule, TitleCasePipe } from '@angular/common';
+import { CommonModule} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PokemonService } from '../service/service';
 import {
@@ -14,7 +14,7 @@ import { PokemonCardComponent } from './pokemon-card/pokemon-card';
 @Component({
   selector: 'app-pokedex',
   standalone: true,
-  imports: [CommonModule, FormsModule, TitleCasePipe, PokemonCardComponent],
+  imports: [CommonModule, FormsModule, PokemonCardComponent],
   templateUrl: './pokedex.html',
   styleUrl: './pokedex.css',
 })

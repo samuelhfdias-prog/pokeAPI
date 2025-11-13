@@ -21,11 +21,6 @@
   font-weight: 900;
   letter-spacing: 1px;
 }
-
-.logo-red { color: #ffcb05; -webkit-text-stroke: 1px #3b4cca; }
-.logo-black { color: white; }
-.subtitle { margin: 5px 0 0; opacity: 0.9; font-size: 0.9rem; }
-
 .pokedex-container {
   display: flex;
   max-width: 1400px;
