@@ -84,3 +84,34 @@
   font-weight: bold;
   margin-top: 5px;
 }
+
+@media (max-width: 768px) {
+  .pokemon-card {
+    padding: 15px;
+  }
+
+  .pokemon-name {
+    font-size: 1.2em;
+  }
+
+  .pokemon-image {
+    width: 120px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pokemon-name {
+    font-size: 1.1em;
+  }
+
+  .pokemon-image {
+    width: 100px;
+    height: 100px;
+  }
+
+  .stats-container {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
