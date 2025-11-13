@@ -193,6 +193,11 @@ select:focus { border-color: #dc0a2d; outline: none; }
   }
   .sidebar {
     flex: 0 0 240px;
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
   }
   .status-bar {
     flex-direction: row;
@@ -220,9 +225,6 @@ select:focus { border-color: #dc0a2d; outline: none; }
   }
   .sidebar {
     flex: 0 0 320px;
-    height: 85vh;
-    position: sticky;
-    top: 20px;
   }
   .pokemon-grid {
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
