@@ -55,7 +55,7 @@ export class PokemonCardComponent {
     const secondary = this.pokemon.secondaryColor;
 
     if (secondary) {
-    return `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`;
+      return `linear-gradient(135deg, ${primary} 0%, ${secondary} 100%)`;
     }
     const rgb = this.hexToRgb(primary);
     return `rgba(${rgb}, 0.8)`;
@@ -67,7 +67,7 @@ export class PokemonCardComponent {
 
   private hexToRgb(hex: string): string {
     if (!hex || hex.length !== 7 || hex[0] !== '#') {
-    return '119, 119, 119';
+      return '119, 119, 119';
     }
     const r = parseInt(hex.slice(1, 3), 16);
     const g = parseInt(hex.slice(3, 5), 16);

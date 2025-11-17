@@ -6,9 +6,20 @@
     <p class="subtitle">Descubra, Filtre e Batalhe!</p>
   </div>
 </header>
-
 <main class="pokedex-container">
   <aside class="sidebar">
+    
+    <div class="control-group">
+      <h3>🔍 Pesquisar</h3>
+      <input
+        type="text"
+        [(ngModel)]="searchTerm"
+        (input)="applyFilters()"
+        placeholder="Buscar Pokémon..."
+        [disabled]="isLoading"
+      />
+    </div>
+
     <div class="control-group generation-select">
       <h3>🌐 Geração</h3>
       <select
@@ -16,7 +27,7 @@
         (ngModelChange)="selectedGen = $event; onGenChange()"
         [disabled]="isLoading"
       >
-        <option *ngFor="let gen of generations" [ngValue]="gen">
+        <option *ngFor="let gen of filteredGenerations" [ngValue]="gen">
           {{ gen.name }}
         </option>
       </select>
@@ -27,24 +38,37 @@
       <select
         [(ngModel)]="selectedType"
         (ngModelChange)="applyFilters()"
-        [disabled]="isLoading">
+        [disabled]="isLoading"
+      >
         <option *ngFor="let type of allTypes" [value]="type">
-        {{ type }}
+          {{ type | titlecase }}
         </option>
       </select>
     </div>
 
     <div class="control-group">
       <h3>📏 Altura</h3>
-      <select [(ngModel)]="selectedheight" (ngModelChange)="applyFilters()" [disabled]="isLoading">
-        <option *ngFor="let height of allHeights" [value]="height">{{ height }}</option>
+      <select 
+        [(ngModel)]="selectedHeight" 
+        (ngModelChange)="applyFilters()" 
+        [disabled]="isLoading"
+      >
+        <option *ngFor="let height of allHeights" [value]="height">
+          {{ height }}
+        </option>
       </select>
     </div>
 
     <div class="control-group">
       <h3>⚖️ Peso</h3>
-      <select [(ngModel)]="selectedweing" (ngModelChange)="applyFilters()" [disabled]="isLoading">
-        <option *ngFor="let weight of allWeings" [value]="weight">{{ weight }}</option>
+      <select 
+        [(ngModel)]="selectedWeight" 
+        (ngModelChange)="applyFilters()" 
+        [disabled]="isLoading"
+      >
+        <option *ngFor="let weight of allWeights" [value]="weight">
+          {{ weight }}
+        </option>
       </select>
     </div>
 
@@ -64,14 +88,16 @@
     </div>
 
     <button 
-        *ngIf="selectedTrainer" 
-        class="reset-button"
-        (click)="loadGeneration(generations[0])">
+      *ngIf="selectedTrainer" 
+      class="reset-button"
+      (click)="loadGeneration(generations[0])"
+    >
       Voltar para Pokédex
     </button>
   </aside>
 
   <section class="main-content">
+    
     <div class="status-bar">
       <h2 *ngIf="!selectedTrainer">Explorando: {{ selectedGen.name }}</h2>
       <h2 *ngIf="selectedTrainer">Time de {{ selectedTrainer.name }}</h2>
@@ -93,5 +119,6 @@
         [pokemon]="pokemon"
       ></app-pokemon-card>
     </div>
+
   </section>
 </main>

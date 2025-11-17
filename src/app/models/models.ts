@@ -55,11 +55,16 @@ export interface Generation {
 }
 
 export const GENERATIONS: Generation[] = [
+  { id: 0, name: 'Todas as Gerações', limit: 1025, offset: 0 },
   { id: 1, name: '1ª Geração (Kanto)', limit: 151, offset: 0 },
   { id: 2, name: '2ª Geração (Johto)', limit: 100, offset: 151 },
   { id: 3, name: '3ª Geração (Hoenn)', limit: 135, offset: 251 },
   { id: 4, name: '4ª Geração (Sinnoh)', limit: 107, offset: 386 },
   { id: 5, name: '5ª Geração (Unova)', limit: 156, offset: 493 },
+  { id: 6, name: '6ª Geração (Kalos)', limit: 72, offset: 649 },
+  { id: 7, name: '7ª Geração (Alola)', limit: 88, offset: 721 },
+  { id: 8, name: '8ª Geração (Galar)', limit: 96, offset: 809 },
+  { id: 9, name: '9ª Geração (Paldea)', limit: 120, offset: 905 },
 ];
 
 export interface Trainer {

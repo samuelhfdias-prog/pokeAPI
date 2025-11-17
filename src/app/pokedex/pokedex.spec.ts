@@ -8,7 +8,7 @@ describe('Pokedex', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [Pokedex]
+      imports: [Pokedex]
     })
     .compileComponents();
 
