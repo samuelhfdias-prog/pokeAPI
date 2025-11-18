@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, map, Observable, switchMap } from 'rxjs';
+import { forkJoin, map, Observable, switchMap, from, mergeMap, toArray, catchError, of } from 'rxjs';
 import {
   ApiPokemonDetail,
   ApiPokemonListResponse,
@@ -29,23 +29,33 @@ export class PokemonService {
       weight: detail.weight / 10,
     };
   }
+
   getPokemonDetail(identifier: string | number): Observable<Pokemon> {
     return this.http
       .get<ApiPokemonDetail>(`${this.apiUrl}/${identifier.toString().toLowerCase()}`)
       .pipe(map((detail) => this.transformToPokemon(detail)));
   }
+
   getPokemonList(limit: number, offset: number = 0): Observable<Pokemon[]> {
     return this.http
       .get<ApiPokemonListResponse>(`${this.apiUrl}?limit=${limit}&offset=${offset}`)
       .pipe(
         switchMap((response) => {
-          const requests = response.results.map((item) =>
-            this.getPokemonDetail(item.name)
+          return from(response.results).pipe(
+            mergeMap((item) => 
+              this.getPokemonDetail(item.name).pipe(
+                catchError((error) => {
+                  console.warn(`Erro ao carregar ${item.name}`, error);
+                  return of(null); 
+                })
+              ),10),
+            toArray(),
+            map((pokemons) => pokemons.filter((p): p is Pokemon => p !== null))
           );
-          return forkJoin(requests);
         })
       );
   }
+
   getTrainersTeam(pokemonNames: string[]): Observable<Pokemon[]> {
     const requests = pokemonNames.map(name => this.getPokemonDetail(name));
     return forkJoin(requests);

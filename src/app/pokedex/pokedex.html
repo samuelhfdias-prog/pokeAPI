@@ -1,11 +1,12 @@
 <header class="pokedex-header">
   <div class="header-content">
     <h1>
-      <img src="Logo pokemon.png" alt="Logo Pokemon">
+      <img src="Logo pokemon.png" alt="Logo Pokemon" style="max-height: 80px;">
     </h1>
     <p class="subtitle">Descubra, Filtre e Batalhe!</p>
   </div>
 </header>
+
 <main class="pokedex-container">
   <aside class="sidebar">
     
@@ -17,6 +18,7 @@
         (input)="applyFilters()"
         placeholder="Buscar Pokémon..."
         [disabled]="isLoading"
+        aria-label="Buscar Pokémon por nome"
       />
     </div>
 
@@ -26,19 +28,20 @@
         [ngModel]="selectedGen"
         (ngModelChange)="selectedGen = $event; onGenChange()"
         [disabled]="isLoading"
+        aria-label="Selecionar Geração"
       >
-        <option *ngFor="let gen of filteredGenerations" [ngValue]="gen">
+        <option *ngFor="let gen of generations" [ngValue]="gen">
           {{ gen.name }}
         </option>
       </select>
     </div>
-
     <div class="control-group type-select">
       <h3>⚡ Tipo</h3>
       <select
         [(ngModel)]="selectedType"
         (ngModelChange)="applyFilters()"
         [disabled]="isLoading"
+        aria-label="Filtrar por Tipo"
       >
         <option *ngFor="let type of allTypes" [value]="type">
           {{ type | titlecase }}
@@ -52,6 +55,7 @@
         [(ngModel)]="selectedHeight" 
         (ngModelChange)="applyFilters()" 
         [disabled]="isLoading"
+        aria-label="Filtrar por Altura"
       >
         <option *ngFor="let height of allHeights" [value]="height">
           {{ height }}
@@ -65,6 +69,7 @@
         [(ngModel)]="selectedWeight" 
         (ngModelChange)="applyFilters()" 
         [disabled]="isLoading"
+        aria-label="Filtrar por Peso"
       >
         <option *ngFor="let weight of allWeights" [value]="weight">
           {{ weight }}
@@ -80,8 +85,10 @@
           class="trainer-avatar"
           [class.active]="selectedTrainer === trainer"
           (click)="loadTrainerTeam(trainer)"
+          role="button"
+          tabindex="0"
         >
-          <img [src]="trainer.imageUrl" [alt]="trainer.name" />
+          <img [src]="trainer.imageUrl" [alt]="'Avatar de ' + trainer.name" />
           <span>{{ trainer.name }}</span>
         </div>
       </div>
@@ -104,12 +111,16 @@
       <span class="count-badge">{{ displayedPokemons.length }} Pokémons</span>
     </div>
 
+    <div *ngIf="errorMessage" class="error-state">
+      ⚠️ {{ errorMessage }}
+    </div>
+
     <div *ngIf="isLoading" class="loading-state">
       <div class="pokeball-spinner"></div>
       <p>Carregando dados...</p>
     </div>
 
-    <div *ngIf="!isLoading && displayedPokemons.length === 0" class="empty-state">
+    <div *ngIf="!isLoading && !errorMessage && displayedPokemons.length === 0" class="empty-state">
       Nenhum Pokémon encontrado com este filtro.
     </div>
 
@@ -119,6 +130,5 @@
         [pokemon]="pokemon"
       ></app-pokemon-card>
     </div>
-
   </section>
 </main>

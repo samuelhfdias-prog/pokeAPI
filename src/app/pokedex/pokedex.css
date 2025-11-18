@@ -55,6 +55,11 @@
   font-size: 1.2rem;
 }
 
+.generation-search {
+  margin-bottom: 10px;
+}
+
+input[type="text"],
 select {
   width: 100%;
   padding: 12px;
@@ -62,10 +67,23 @@ select {
   border: 2px solid #e0e0e0;
   font-size: 1rem;
   background-color: #fff;
-  cursor: pointer;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
-select:focus { border-color: #dc0a2d; outline: none; }
+
+input[type="text"] {
+  cursor: text;
+}
+
+select {
+  cursor: pointer;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-color: #dc0a2d;
+  outline: none;
+}
 
 .trainer-grid {
   display: grid;
@@ -178,6 +196,16 @@ select:focus { border-color: #dc0a2d; outline: none; }
   background: #dc0a2d;
   border-radius: 50%;
   transform: translate(-50%, -50%);
+}
+.error-state {
+  text-align: center;
+  padding: 20px;
+  background-color: #ffe6e6;
+  color: #cc0000;
+  border: 1px solid #cc0000;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  font-weight: bold;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }

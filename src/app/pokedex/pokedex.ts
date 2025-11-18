@@ -20,6 +20,7 @@ import { PokemonCardComponent } from './pokemon-card/pokemon-card';
 })
 export class Pokedex implements OnInit {
   isLoading: boolean = false;
+  errorMessage: string = '';
   displayedPokemons: Pokemon[] = [];
   fullListInMemory: Pokemon[] = [];
   searchTerm: string = '';
@@ -27,12 +28,12 @@ export class Pokedex implements OnInit {
   selectedGen: Generation = this.generations[0];
   generationSearchTerm: string = '';
   filteredGenerations: Generation[] = [...this.generations];
-  allTypes = ['todos', ...Object.keys(TYPE_COLORS)];
-  selectedType: string = 'todos';
-  allWeights = ['todos', 'leve (<10kg)', 'médio (10-100kg)', 'pesado (>100kg)'];
-  allHeights = ['todos', 'baixo (<1 metro)', 'médio (1-2 metros)', 'alto (>2 metros)'];
-  selectedWeight: string = 'todos';
-  selectedHeight: string = 'todos';
+  allTypes = ['Todos', ...Object.keys(TYPE_COLORS)];
+  selectedType: string = 'Todos';
+  allWeights = ['Todos', 'leve (<10kg)', 'médio (10-100kg)', 'pesado (>100kg)'];
+  selectedWeight: string = 'Todos';
+  allHeights = ['Todos', 'baixo (<1 metro)', 'médio (1-2 metros)', 'alto (>2 metros)'];
+  selectedHeight: string = 'Todos';
   selectedTrainer: Trainer | null = null;
   trainers: Trainer[] = [
     {
@@ -58,6 +59,7 @@ export class Pokedex implements OnInit {
   ];
 
   constructor(private pokemonService: PokemonService) {}
+
   ngOnInit(): void {
     this.loadGeneration(this.selectedGen);
     this.filteredGenerations = this.generations;
@@ -74,8 +76,7 @@ export class Pokedex implements OnInit {
       if (
       this.filteredGenerations.length > 0 &&
       !this.filteredGenerations.includes(this.selectedGen)
-    ) 
-    {
+    ) {
       this.selectedGen = this.filteredGenerations[0];
       this.onGenChange();
     }
@@ -84,6 +85,7 @@ export class Pokedex implements OnInit {
     if (!gen) return;
 
     this.isLoading = true;
+    this.errorMessage = '';
     this.selectedTrainer = null;
     this.selectedGen = gen;
 
@@ -95,14 +97,19 @@ export class Pokedex implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao carregar geração:', err);
+        this.errorMessage = 'Ocorreu um erro ao carregar os Pokémons. Verifique sua conexão.';
         this.isLoading = false;
       },
     });
   }
   loadTrainerTeam(trainer: Trainer): void {
     this.isLoading = true;
+    this.errorMessage = '';
     this.selectedTrainer = trainer;
-    this.selectedType = 'todos'; // Reseta filtro de tipo para mostrar todo o time
+    this.selectedType = 'Todos';
+    this.selectedHeight = 'Todos';
+    this.selectedWeight = 'Todos';
+    this.searchTerm = '';
 
     this.pokemonService.getTrainersTeam(trainer.pokemons).subscribe({
       next: (pokemons) => {
@@ -112,6 +119,7 @@ export class Pokedex implements OnInit {
       },
       error: (err) => {
         console.error('Erro ao carregar time do treinador:', err);
+        this.errorMessage = `Não foi possível carregar o time de ${trainer.name}.`;
         this.isLoading = false;
       },
     });
@@ -121,7 +129,6 @@ export class Pokedex implements OnInit {
   }
   applyFilters(): void {
     let filteredList = this.fullListInMemory;
-
     filteredList = this.filterByName(filteredList);
     filteredList = this.filterByType(filteredList);
     filteredList = this.filterByHeight(filteredList);
@@ -137,13 +144,13 @@ export class Pokedex implements OnInit {
   }
 
   private filterByType(pokemons: Pokemon[]): Pokemon[] {
-    if (this.selectedType === 'todos') return pokemons;
+    if (this.selectedType.toLowerCase() === 'todos') return pokemons;
     const type = this.selectedType.toLowerCase();
     return pokemons.filter((p) => p.types.includes(type));
   }
 
   private filterByHeight(pokemons: Pokemon[]): Pokemon[] {
-    if (this.selectedHeight === 'todos') return pokemons;
+    if (this.selectedHeight.toLowerCase() === 'todos') return pokemons;
     
     return pokemons.filter((p) => {
       const height = p.height;
@@ -161,7 +168,8 @@ export class Pokedex implements OnInit {
   }
 
   private filterByWeight(pokemons: Pokemon[]): Pokemon[] {
-    if (this.selectedWeight === 'todos') return pokemons;
+    if (this.selectedWeight.toLowerCase() === 'todos') return pokemons;
+    
     return pokemons.filter((p) => {
       const weight = p.weight;
       switch (this.selectedWeight) {
